@@ -34,7 +34,8 @@ def llm_answer_request(instruction, prompt, model):
     )
     # output_text = response.choices[0].message['content']
     # output_text = response.choices[0]['message']['content']
-    output_text = response.choices[0].message.content.replace("\'", '')
+    # output_text = response.choices[0].message.content.replace("\'", '')
+    output_text = response.choices[0].message.content
     return output_text
     
 
@@ -50,17 +51,23 @@ def generate_prompt(searched_news):
       - type: str
       - 뉴스 기사들의 내용을 하나의 내용으로 종합한 내용
     - relate
-      - type: str
-      - 종합한 내용이 어떤 산업과 연관이 있는지에 대한 내용
+      - type: List[dict]
+      - 종합한 내용이 어떤 산업과 연관이 있고, 왜 연관이 있는지를 담은 정보
+      - <산업> : 기사와 연관된 산업
+      - <설명> : 기사와 연관된 산업이 왜 연관이 있는지를 설명
+      - key : value
+        'industry' : <산업>
+        'description' : <설명>
+
     - oracle
-      - type: <List>
+      - type: List[str]
       - 종합한 내용에서 어떤 insight를 얻을 수 있을지, 예를 들어 투자할 산업, 기업, 새로운 기회와 같은 것을 종합한 내용을 리스트업해서 list로 담아줘.
     * Output은 JSON 형식으로 작성해줘.
     {
-      "report_title": "<str>",
-      "main_text": "<str>",
-      "relate": "<str>",
-      "oracle": ["<str1>", "<str2>", "<str3>"]
+      "report_title": <str>,
+      "main_text": <str>,
+      "relate": [{'industry':<산업>, 'description':<설명>}],
+      "oracle": [<str1>, <str2>, <str3>]
     }
     """
     prompt = f"""
@@ -77,8 +84,25 @@ def generate_report(query):
     # 검색된 뉴스 기사들을 바탕으로 보고서 생성
     report = generate_prompt(searched_news)
     json_obj = json.loads(report)
-    # print(type(json_obj))
+    print(type(json_obj))
+    print(json_obj)
     return json_obj
+
+    try:
+        json_obj = json.loads(report)
+        print("Generated report structure:", json.dumps(json_obj, ensure_ascii=False, indent=2))
+        return json_obj
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON: {e}")
+        print("Raw response:", report)
+        # 에러 발생 시 기본 구조 반환
+        return {
+            "report_title": "Error generating report",
+            "main_text": "An error occurred while generating the report.",
+            "relate": [],
+            "oracle": []
+        }
+
     
 
 if __name__ == "__main__":

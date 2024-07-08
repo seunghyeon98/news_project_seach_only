@@ -12,22 +12,27 @@
         <div class="logo">AI News</div>
       </header>
 
-      <!-- <h1 class="top-left">AI News</h1> -->
       <div class="daily-news">
         <h2 class="glow">📰 News Report</h2>
         <p class="subtitle">최신 기술로 제공되는 뉴스 리포트</p>
       </div>
       <div class="search-container">
         <input type="text" id="search-input" placeholder="뉴스 검색..." />
-        <button id="search-button"> 검색 🔎</button>
+        <button id="search-button">검색 🔎</button>
       </div>
-      <div id="result">
-        <h2 id="report-title"></h2>
-        <div id="main-text"></div>
-        <h3>관련 산업</h3>
-        <div id="relate"></div>
-        <h3>인사이트</h3>
-        <ul id="oracle"></ul>
+      <div id="result" class="newspaper">
+        <h2 id="report-title" class="newspaper-headline"></h2>
+        <div id="main-text" class="newspaper-content"></div>
+        <div class="newspaper-columns">
+          <div class="newspaper-column">
+            <h3 class="newspaper-subheadline">관련 산업</h3>
+            <ul id="relate" class="newspaper-text"></ul>
+          </div>
+          <div class="newspaper-column">
+            <h3 class="newspaper-subheadline">인사이트</h3>
+            <ul id="oracle" class="newspaper-list"></ul>
+          </div>
+        </div>
       </div>
     </div>
     <script src="{{ url_for('static', path='/script.js') }}"></script>

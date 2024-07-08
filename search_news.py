@@ -36,11 +36,13 @@ def process_articles(articles, limit=6):
         title = article.get('title', '')
         description = article.get('description', '')
         url = article.get('url', '')
+        urlToImage = article.get('urlToImage','')
 
         processed_articles.append({
             'title': title,
             'description': description,
             'url': url,
+            'urlToImage' : urlToImage
         })
     return processed_articles
 

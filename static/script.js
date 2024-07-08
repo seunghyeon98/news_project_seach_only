@@ -16,12 +16,20 @@ document
         query: query,
       }),
     });
-
     if (response.ok) {
       const data = await response.json();
       document.getElementById("report-title").innerText = data.report_title;
       document.getElementById("main-text").innerText = data.main_text;
-      document.getElementById("relate").innerText = data.relate;
+
+      const relateList = document.getElementById("relate");
+      relateList.innerHTML = ""; // Clear previous results
+
+      data.relate.forEach((item) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>${item.industry}</strong>: ${item.description}`;
+        relateList.appendChild(li);
+      });
+
       const oracleList = document.getElementById("oracle");
       oracleList.innerHTML = ""; // Clear previous results
       data.oracle.forEach((item) => {
